@@ -241,6 +241,20 @@ public class Imagem {
 		int[] retorno = {menorIndiceH, maiorIndiceH};
 		return retorno;
 	}
+	
+	public int[] getExtremos(){
+		int[] extremos = new int[4];
+		
+		int[] extremosV = this.extremosVerticais();
+		int[] extremosH = this.extremosHorizontais();
+		
+		extremos[0] = extremosH[0];
+		extremos[1] = extremosH[1];
+		extremos[2] = extremosV[0];
+		extremos[3] = extremosV[1];
+		
+		return extremos;
+	}
 
 	public int getAltura(){
 		int[] pontos = this.extremosVerticais();

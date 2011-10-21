@@ -1,8 +1,15 @@
-package upe.pdi.caracteristicas;
+package upe.classificacao;
 
 public class ImageClass {
 
 	private double[] caracteristicas;
+	public double[] getCaracteristicas() {
+		return caracteristicas;
+	}
+
+	public void setCaracteristicas(double[] caracteristicas) {
+		this.caracteristicas = caracteristicas;
+	}
 	private int classe;
 	
 	public ImageClass(double[] momentosHu, int classe){
@@ -20,12 +27,7 @@ public class ImageClass {
 		return Math.sqrt(soma);
 	}
 	
-	public double[] getMomentosHu() {
-		return caracteristicas;
-	}
-	public void setMomentosHu(double[] momentosHu) {
-		this.caracteristicas = momentosHu;
-	}
+	
 	public int getClasse() {
 		return classe;
 	}

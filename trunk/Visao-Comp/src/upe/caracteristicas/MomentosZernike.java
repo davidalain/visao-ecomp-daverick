@@ -1,4 +1,4 @@
-package upe.pdi.caracteristicas;
+package upe.caracteristicas;
 
 import java.util.LinkedList;
 
