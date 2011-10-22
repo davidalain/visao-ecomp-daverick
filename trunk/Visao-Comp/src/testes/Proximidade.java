@@ -13,7 +13,7 @@ public class Proximidade {
 
 	private static int[] angulos = {125, 120, 235, 95, 260, 10, 25, 285, 110, 270, 85, 45, 75, 245, 165, 155, 60, 325, 175, 
 		50, 100, 220, 65, 340, 215, 80, 35, 130, 265, 185, 115, 320, 70, 280, 275, 315, 160, 20, 15, 205, 345, 335, 240, 
-		330, 105, 350, 210, 295, 140, 40, 145, 230, 5, 30, 255, 310, 150, 170, 305, 290, 250, 300, 190, 135, 55, 195, 200, 
+		330, 105, 350, 210, 0, 295, 140, 40, 145, 230, 5, 30, 255, 310, 150, 170, 305, 290, 250, 300, 190, 135, 55, 195, 200, 
 		90, 225, 355, 180};
 	/**
 	 * @param args
@@ -21,32 +21,49 @@ public class Proximidade {
 	 */
 	public static void main(String[] args) throws Exception {
 
-
-		int classe = 1;
-		int acertou = 0;
-
 		DistanciaComparator comparator = new DistanciaComparator();
 
-		for (int i = 0; i < angulos.length; i++) {
-			ArrayList<AnguloDistancias> lista = new ArrayList<AnguloDistancias>();
-			int anguloRef = angulos[i];
-			System.out.print("Sorteado = " + anguloRef);
-			int[] extremosRef = pegarImagem(classe, anguloRef).getExtremos();
+		for(int k=1; k<=1000; k++){
 
-			for (int j = 0; j < 72; j++) {
-				int anguloTemp = j*5;
-				int[] extremosTemp = pegarImagem(classe, anguloTemp).getExtremos();
+			int classe = k;
+			double acertou = 0;
+			double variacao = 0;
 
-				double distanciaTemp = distanciaEuclidiana(extremosRef, extremosTemp);
-				
-				lista.add(new AnguloDistancias(distanciaTemp, anguloTemp));
+			for (int i = 0; i < 72; i++) {
+				ArrayList<AnguloDistancias> lista = new ArrayList<AnguloDistancias>();
+				int anguloRef = i*5;
+				//System.out.print("Sorteado = " + anguloRef);
+				int[] extremosRef = pegarImagem(classe, anguloRef).getExtremos();
+
+				for (int j = 0; j < angulos.length; j++) {
+					int anguloTemp = angulos[j];
+					int[] extremosTemp = pegarImagem(classe, anguloTemp).getExtremos();
+
+					double distanciaTemp = distanciaEuclidiana(extremosRef, extremosTemp);
+
+					lista.add(new AnguloDistancias(distanciaTemp, anguloTemp));
+				}
+
+				Collections.sort(lista, comparator);
+
+				if(anguloRef == lista.get(0).getAngulo()){
+					acertou++;
+				}else{
+					int l = 0;
+					while(l < lista.size()){
+						l++;
+						if(anguloRef == lista.get(l).getAngulo()){
+							break;
+						}
+					}
+					
+					
+					variacao += ((double)l)/lista.size();
+				}
 			}
-			
-			Collections.sort(lista, comparator);
-			System.out.println("Fim");
+
+			System.out.println("Classe " + classe + " = " + 100*(acertou/angulos.length) + "\t" + 100*(variacao/angulos.length));
 		}
-
-
 
 
 		System.out.println("Fim");
@@ -70,7 +87,7 @@ public class Proximidade {
 
 		return img.aplicarMascara(mascara);
 	}
-	
+
 	private static double distanciaEuclidiana(int[] pontos1, int[] pontos2){
 		double soma = 0;
 

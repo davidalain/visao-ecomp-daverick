@@ -16,9 +16,11 @@ public class Filtrando {
 		for(int j=0; j<1000; j++){
 			int classe = j+1;
 			int acertou = 0;
+			double erroPerc = 0;
 
 			for(int i=0; i<72; i++){
 				int angulo = 5*i;
+				double erroTemp = 0;
 				//System.out.print("Sorteado = " + angulo);
 
 				Imagem imgFinal = pegarImagem(classe, angulo);
@@ -33,11 +35,17 @@ public class Filtrando {
 
 				if(angulo == anguloFinal){
 					acertou++;
+				}else{
+					erroTemp = Math.abs(anguloFinal-angulo);
+					erroTemp /= 360;
 				}
+				
+				erroPerc += erroTemp;
 			}
 
 			double porcentagem = (acertou/72.0)*100;
-			System.out.println(porcentagem);
+			double erroMedioPerc = ((erroPerc)/72)*100;
+			System.out.println(porcentagem + "\t" + erroMedioPerc);
 		}
 	}
 
