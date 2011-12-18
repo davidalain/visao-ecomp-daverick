@@ -19,7 +19,7 @@ public class FiltrandoAlone {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		for(int r=0; r<10; r++){
+		for(int r=9; r<10; r++){
 
 			System.out.println("*** Run " + (r+1) + " ***");
 			
@@ -29,7 +29,7 @@ public class FiltrandoAlone {
 			
 			double acertoTotal = 0;
 			
-			for(int i=0; i<100; i++){
+			for(int i=0; i<1000; i++){
 				int classe =i+1;
 				double acertoClasse = 0;
 
@@ -67,6 +67,12 @@ public class FiltrandoAlone {
 
 	}
 
+	/**
+	 * Verifica se o angulo dado esta entre os outros dois passados como parametro
+	 * @param anguloRef Angulo dado
+	 * @param angulosFinais Angulos de referencia
+	 * @return True - Angulo esta entre os outros dois; False - Angulo nao esta entre os outros dois
+	 */
 	private static boolean acertou(int anguloRef, int[] angulosFinais){
 		if(angulosFinais[0] <= anguloRef && angulosFinais[1] >= anguloRef){
 			return true;
@@ -75,8 +81,13 @@ public class FiltrandoAlone {
 		return false;
 	}
 
+	/**
+	 * Gera os angulos para a comparacao
+	 * @return Angulos para comparacao
+	 */
 	private static int[] gerarAngulos() {
 
+		//Sorteia um angulo entre 0-355
 		int anguloRand = new Random().nextInt(71)*5;
 
 
@@ -86,6 +97,7 @@ public class FiltrandoAlone {
 		//Quantos angulos com distancia de 90 graus eu tenho ate chegar em 355
 		int contAngulosDepois = (355 - anguloRand)/90;
 
+		//Defino quais angulos estao entre 0-anguloRand com uma diferenca de 90 graus
 		int[] angAntes;
 		if(contAngulosAntes == 0){
 			angAntes = new int[1];
@@ -99,6 +111,7 @@ public class FiltrandoAlone {
 			}
 		}
 
+		//Defino quais angulos estao entre anguloRand-355 com uma diferenca de 90 graus
 		int[] angDepois;
 		if(contAngulosDepois == 0){
 			angDepois = new int[1];
@@ -112,9 +125,8 @@ public class FiltrandoAlone {
 			}
 		}
 
-
+		//Organizo os angulos descobertos acima para retorna-los de forma ordenada
 		int[] retorno = new int[angAntes.length + angDepois.length + 1];
-
 		for (int i = 0; i < retorno.length; i++) {
 			if(i < angAntes.length){
 				retorno[i] = angAntes[i];
@@ -131,6 +143,14 @@ public class FiltrandoAlone {
 		return retorno;
 	}
 
+	/**
+	 * Dado uma imagem define entre quais dos angulos ela se encontra
+	 * @param imagem Imagem de entrada
+	 * @param classe Classe da imagem
+	 * @param angulos Angulos para comparacao
+	 * @return Angulos que a imagem esta no meio 
+	 * @throws Exception
+	 */
 	private static int[] angulosProximo(Imagem imagem, int classe, int[] angulos) throws Exception{
 		int[] extremosRef = imagem.getExtremos();
 

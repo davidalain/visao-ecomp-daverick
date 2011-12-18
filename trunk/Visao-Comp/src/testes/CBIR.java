@@ -138,19 +138,7 @@ public class CBIR {
 		return Math.sqrt(soma);
 	}
 
-	private static double distanciaTradicional(double[][] imagem1, double[][] imagem2){
-		double distancia = 0;
-		for (int i = 0; i < imagem1.length; i++) {
-			for (int j = 0; j < imagem1[i].length; j++) {
-				distancia += Math.abs(imagem1[i][j] - imagem2[i][j]);
-			}
-		}
 		
-		double total = imagem1.length + imagem1[0].length;
-		
-		return (distancia/total);
-	}
-	
 	/**
 	 * @param args
 	 * @throws Exception 

@@ -147,9 +147,9 @@ public class CBIR_simples {
 			}
 		}
 		
-		double total = imagem1.length + imagem1[0].length;
+		//double total = imagem1.length + imagem1[0].length;
 		
-		return (distancia/total);
+		return distancia;
 	}
 	
 	/**
