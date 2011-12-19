@@ -24,11 +24,18 @@ public class FiltrandoAlone {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		run(6,"arquivos/filtrando_extremos",false);
-		run(6,"arquivos/filtrando_extremos_histograma",true);
+		//run(6,"arquivos/filtrando_extremos",true);
+		run(1,"arquivos/filtrando_extremos+histograma",false);
 		
 	}
 
+	/**
+	 * Executa a classificação
+	 * @param quantidadeExecucoes
+	 * @param outputName
+	 * @param extremosApenas
+	 * @throws Exception
+	 */
 	private static void run(int quantidadeExecucoes, String outputName, boolean extremosApenas) throws Exception {
 		
 		for(int r=0 ; r < quantidadeExecucoes ; r++){
@@ -53,10 +60,12 @@ public class FiltrandoAlone {
 			bw.newLine();
 			bw.flush();
 			
+			//Testa para as 1000 classes
 			for(int i=0; i<1000; i++){
 				int classe =i+1;
 				double acertoClasse = 0;
 
+				//Testa para as 72 imagens de cada classe
 				for(int j=0; j<72; j++){
 
 					int angulo = (j+1)*5 % 360;
@@ -67,6 +76,7 @@ public class FiltrandoAlone {
 							angulosProximosExtremos(imgFinal, classe, angulosRef) :
 							angulosProximosCaracteristicas(imgFinal, classe, angulosRef);
 
+					//Verifica se o angulo dado está entre os angulosFinais obtidos que estão mais próximos
 					if(acertou(angulo, angulosFinais)){
 						acertoClasse++;
 					}
@@ -74,6 +84,7 @@ public class FiltrandoAlone {
 
 				acertoClasse /= 72.0;
 				
+				//Escreve no arquivo a taxa de acerto obtida nesta classe.
 				bw.write(acertoClasse + "");
 				bw.newLine();
 				bw.flush();
@@ -121,120 +132,37 @@ public class FiltrandoAlone {
 	/**
 	 * Gera os angulos para a comparacao
 	 * @return Angulos para comparacao
-	 */
-//	private static int[] gerarAngulos() {
-//
-//		//Sorteia um angulo entre 0-355
-//		int anguloRand = new Random().nextInt(71)*5;
-//
-//
-//		//Quantos angulos com distancia de 90 graus eu tenho ate chegar em 0
-//		int contAngulosAntes = (anguloRand - 0)/90;
-//
-//		//Quantos angulos com distancia de 90 graus eu tenho ate chegar em 355
-//		int contAngulosDepois = (355 - anguloRand)/90;
-//
-//		//Defino quais angulos estao entre 0-anguloRand com uma diferenca de 90 graus
-//		int[] angAntes;
-//		if(contAngulosAntes == 0){
-//			angAntes = new int[1];
-//
-//			angAntes[0] = 0;
-//		}else{
-//			angAntes = new int[contAngulosAntes];
-//
-//			for (int i = 0; i < angAntes.length; i++) {
-//				angAntes[i] = (anguloRand - 90*(i+1));
-//			}
-//		}
-//
-//		//Defino quais angulos estao entre anguloRand-355 com uma diferenca de 90 graus
-//		int[] angDepois;
-//		if(contAngulosDepois == 0){
-//			angDepois = new int[1];
-//
-//			angDepois[0] = 355;
-//		}else{
-//			angDepois = new int[contAngulosDepois];
-//
-//			for (int i = 0; i < angDepois.length; i++) {
-//				angDepois[i] = (anguloRand + 90*(i+1));
-//			}
-//		}
-//
-//		//Organizo os angulos descobertos acima para retorna-los de forma ordenada
-//		int[] retorno = new int[angAntes.length + angDepois.length + 1];
-//		for (int i = 0; i < retorno.length; i++) {
-//			if(i < angAntes.length){
-//				retorno[i] = angAntes[i];
-//			}else if(i == angAntes.length){
-//				retorno[i] = anguloRand;
-//			}
-//			else{
-//				retorno[i] = angDepois[i-angAntes.length-1];
-//			}
-//		}
-//
-//		Arrays.sort(retorno);
-//
-//		return retorno;
-//	}
-	
+	 */	
 	private static int[] gerarAngulos() {
 
 		//Sorteia um angulo entre 0-355
 		int anguloRand = new Random().nextInt(71)*5;
 		
-		//Organizo os angulos descobertos acima para retorna-los de forma ordenada
+		//Ângulos que serão retornados
 		int[] retorno = new int[4];
 
+		//Pega os outros 3 ângulos com diferença de 90 graus cada
 		for(int i = 0 ; i < 4 ; i++){
 			retorno[i] = (anguloRand + (90*i)) % 360;
 		}
-
+		
+		//Organizo os angulos descobertos acima para retorna-los de forma ordenada
 		Arrays.sort(retorno);
 
 		return retorno;
 	}
 
 	/**
-	 * Dado uma imagem define entre quais dos angulos ela se encontra
+	 * Dado uma imagem define entre quais dos angulos ela se encontra comparando com os extremos da imagem
 	 * @param imagem Imagem de entrada
 	 * @param classe Classe da imagem
 	 * @param angulos Angulos para comparacao
 	 * @return Angulos que a imagem esta no meio 
 	 * @throws Exception
 	 */
-//	private static int[] angulosProximo(Imagem imagem, int classe, int[] angulos) throws Exception{
-//		int[] extremosRef = imagem.getExtremos();
-//
-//		Imagem temp = null;
-//		double menorDist = Double.MAX_VALUE;
-//		int anguloMaisProx = -1;
-//		int anguloMaisProx2 = -1;
-//		
-//		for (int i = 0; i < angulos.length; i++) {
-//			temp = pegarImagem(classe, angulos[i]);
-//
-//			int[] extremosTemp = temp.getExtremos();
-//			double distTemp = distanciaEuclidiana(extremosRef, extremosTemp);
-//
-//			if( distTemp < menorDist){
-//				menorDist = distTemp;
-//				anguloMaisProx = angulos[i];
-//
-//				if(i > 0){
-//					anguloMaisProx2 = angulos[i-1];
-//				}
-//			}
-//		}
-//
-//		System.out.println("Ang1: "+anguloMaisProx + ", Ang2:" + anguloMaisProx2);
-//		int[] retorno = {anguloMaisProx2, anguloMaisProx}; 
-//		return retorno;
-//
-//	}
 	private static int[] angulosProximosExtremos(Imagem imagem, int classe, int[] angulos) throws Exception{
+		
+		//Pega os extremos da imagem de query
 		int[] extremosRef = imagem.getExtremos();
 
 		Imagem temp = null;
@@ -243,6 +171,7 @@ public class FiltrandoAlone {
 		double[] distancias = new double[angulos.length];
 		int[] retorno = new int[2];
 		
+		//Calcula as distancias entre a imagem de query e as imagens dos angulos dados
 		for (int i = 0; i < angulos.length; i++) {
 			temp = pegarImagem(classe, angulos[i]);
 
@@ -250,6 +179,7 @@ public class FiltrandoAlone {
 			distancias[i] = distanciaEuclidiana(extremosRef, extremosTemp);
 		}
 		
+		//Pega o indice do vetor de ângulos correspondente a imagem que possui a menor distancia
 		for(int i = 0 ; i < angulos.length ; i++){
 			if(menorDistancia > distancias[i]){
 				menorDistancia = distancias[i];
@@ -257,8 +187,12 @@ public class FiltrandoAlone {
 			}
 		}
 		
-		int anterior = (indiceMaisProx + 3) % 4; //O mais correto seria (indiceMaisProx - 1) % 4, mas o Java resultados de módulo negativos para valores negativos. Blah! 
+		//Pega a imagem anterior e posterior para comparação.
+		//Equivalente a pegar a imagens com +90 graus e -90 graus.
+		int anterior = (indiceMaisProx + 3) % 4; //O mais correto seria (indiceMaisProx - 1) % 4, mas o Java dá resultados de módulo negativos para valores negativos. Blah! 
 		int posterior = (indiceMaisProx + 1) % 4;
+		
+		//Coloca no vetor de saida, os angulos que mais se aproximam 
 		if(distancias[anterior] <= distancias[posterior]){
 			retorno[0] = angulos[anterior];
 			retorno[1] = angulos[indiceMaisProx];
@@ -271,6 +205,14 @@ public class FiltrandoAlone {
 
 	}
 	
+	/**
+	 * Dado uma imagem define entre quais dos angulos ela se encontra comparando com as características (extremos+histograma) da imagem
+	 * @param imagem Imagem de entrada
+	 * @param classe Classe da imagem
+	 * @param angulos Angulos para comparacao
+	 * @return Angulos que a imagem esta no meio 
+	 * @throws Exception
+	 */
 	private static int[] angulosProximosCaracteristicas(Imagem imagem, int classe, int[] angulos) throws Exception{
 		int[] extremosRef = imagem.getCaracteristicas();
 
@@ -327,6 +269,12 @@ public class FiltrandoAlone {
 		return img.aplicarMascara(mascara);
 	}
 	
+	/**
+	 * Carrega a imagem do disco e retorna
+	 * @param classe
+	 * @param angulo
+	 * @return
+	 */
 	private static Imagem pegarImagemMascarada(int classe, int angulo){
 		String imagemPath = classe + "\\"+ classe +"_r"+ angulo + ".png";
 		double[][] imagemMascarada = null;
