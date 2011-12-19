@@ -255,6 +255,24 @@ public class Imagem {
 		
 		return extremos;
 	}
+	
+	public int[] getCaracteristicas(){
+		int[] caracteristicas = new int[4 + 256];
+		
+		int[] extremosV = this.extremosVerticais();
+		int[] extremosH = this.extremosHorizontais();
+		
+		caracteristicas[0] = extremosH[0];
+		caracteristicas[1] = extremosH[1];
+		caracteristicas[2] = extremosV[0];
+		caracteristicas[3] = extremosV[1];
+		
+		for(int i = 0 ; i < GRAYLEVEL ; i++){
+			caracteristicas[i + 4] = (int)histograma[i];
+		}
+		
+		return caracteristicas;
+	}
 
 	public int getAltura(){
 		int[] pontos = this.extremosVerticais();
