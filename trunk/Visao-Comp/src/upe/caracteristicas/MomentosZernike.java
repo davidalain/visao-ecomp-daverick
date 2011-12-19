@@ -135,28 +135,48 @@ public class MomentosZernike {
 	
 	private double calcularR(double raio, int momentIndex){
 		
-		switch(momentIndex){
-		case 0:
-			return 1.0;
-		case 1:
-			return raio;
-		case 2:
-			return 2*raio*raio - 1;
-		case 3:	
-			return raio*raio;
-		case 4:
-			return 3*raio*raio*raio - 2*raio;
-		case 5:
-			return raio*raio*raio;
-		case 6:
-			return 6*Math.pow(raio, 4) - 6*raio*raio;
-		case 7:
-			return 4*Math.pow(raio, 4) - 3*raio*raio;
-		case 8:
-			return Math.pow(raio, 4);
+		double[] valores = new double[]
+		{
+			1.0,
+			raio,
+			2*raio*raio - 1,
+			raio*raio,
+			3*raio*raio*raio - 2*raio,
+			raio*raio*raio,
+			6*Math.pow(raio, 4) - 6*raio*raio,
+			4*Math.pow(raio, 4) - 3*raio*raio,
+			Math.pow(raio, 4)
+		};
+											
+		
+		if(0 > momentIndex || momentIndex > 8){
+			return 0;
+		}else{
+			return valores[momentIndex];
 		}
 		
-		return 0;
+		// switch(momentIndex){
+		// case 0:
+			// return 1.0;
+		// case 1:
+			// return raio;
+		// case 2:
+			// return 2*raio*raio - 1;
+		// case 3:	
+			// return raio*raio;
+		// case 4:
+			// return 3*raio*raio*raio - 2*raio;
+		// case 5:
+			// return raio*raio*raio;
+		// case 6:
+			// return 6*Math.pow(raio, 4) - 6*raio*raio;
+		// case 7:
+			// return 4*Math.pow(raio, 4) - 3*raio*raio;
+		// case 8:
+			// return Math.pow(raio, 4);
+		// }
+		
+		// return 0;
 	}
 	
 }
